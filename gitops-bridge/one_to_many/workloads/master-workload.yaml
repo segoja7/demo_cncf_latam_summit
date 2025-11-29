@@ -15,27 +15,28 @@ spec:
                   - key: environment
                     operator: NotIn
                     values: [hub]
-          
+
           - git:
-              repoURL: https://github.com/segoja7/platform_as_data
-              revision: master
+              repoURL: https://github.com/segoja7/demo_cncf_latam_summit/
+              revision: HEAD
               directories:
-                - path: xargoapps/gitops-bridge/fleet-rollout/*/*
+                - path: dev_consumer/*
 
   template:
     metadata:
-      name: '{{.path.basename}}-{{.name}}' 
+      name: '{{.path.basename}}-{{.name}}'
       namespace: argocd
     spec:
       project: default
       source:
-        repoURL: https://github.com/segoja7/platform_as_data
-        targetRevision: master
+        repoURL: https://github.com/segoja7/demo_cncf_latam_summit/
+        targetRevision: HEAD
         path: '{{.path.path}}'
+        plugin:
+          name: kcl-v1.0
       destination:
         name: '{{.name}}'
-        # Usamos index directamente aquí, confiando en que Go Template tiene acceso a .path.segments
-        namespace: '{{index .path.segments 3}}' 
+        namespace: default
       syncPolicy:
         automated:
           prune: true
