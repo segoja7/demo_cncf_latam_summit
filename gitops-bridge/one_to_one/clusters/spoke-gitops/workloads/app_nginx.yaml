@@ -10,7 +10,7 @@ spec:
     targetRevision: HEAD
     plugin:
           name: kcl-v1.0
-    path: dev_consumer/demo_app/
+    path: dev_consumer/demo-app/
   destination:
     name: spoke-gitops
     namespace: default
