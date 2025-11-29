@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'example_basic_k8s/**'
+    # paths:
+    #   - 'example_basic_k8s/**'
 
 env:
   MODULE_PATH: ./example_basic_k8s
