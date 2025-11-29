@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: master-workload-controller
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: environment
+                    operator: NotIn
+                    values: [hub]
+          
+          - git:
+              repoURL: https://github.com/segoja7/platform_as_data
+              revision: master
+              directories:
+                - path: xargoapps/gitops-bridge/fleet-rollout/*/*
+
+  template:
+    metadata:
+      name: '{{.path.basename}}-{{.name}}' 
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/segoja7/platform_as_data
+        targetRevision: master
+        path: '{{.path.path}}'
+      destination:
+        name: '{{.name}}'
+        # Usamos index directamente aquí, confiando en que Go Template tiene acceso a .path.segments
+        namespace: '{{index .path.segments 3}}' 
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
