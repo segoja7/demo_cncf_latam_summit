@@ -8,7 +8,7 @@ on:
     #   - 'example_basic_k8s/**'
 
 env:
-  MODULE_PATH: ./example_basic_k8s
+  MODULE_PATH: ./examples_kcl/2_example_basic_k8s
   OCI_URL: oci://ghcr.io/${{ github.repository_owner }}/example_basic_k8s
 
 jobs:
