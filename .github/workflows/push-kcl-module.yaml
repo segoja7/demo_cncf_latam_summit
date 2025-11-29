@@ -33,7 +33,7 @@ jobs:
 
       - name: Login to GHCR
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | kcl registry login ghcr.io -u ${{ github.actor }} --password-stdin
+          kcl registry login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push KCL Module
         working-directory: ${{ env.MODULE_PATH }}
