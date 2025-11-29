@@ -1,0 +1,43 @@
+name: KCL Module
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'example_basic_k8s/**'
+
+env:
+  MODULE_PATH: ./example_basic_k8s
+  OCI_URL: oci://ghcr.io/${{ github.repository_owner }}/example_basic_k8s
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Install KCL Binary
+        run: |
+          export KCL_DIR="$HOME/.kcl"
+
+          wget -q https://kcl-lang.io/script/install-cli.sh -O - | KCL_INSTALL_DIR=$KCL_DIR bash
+
+          echo "$KCL_DIR/bin" >> $GITHUB_PATH
+      - name: Verify Install
+        run: kcl --version
+
+      - name: Login to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | kcl registry login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push KCL Module
+        working-directory: ${{ env.MODULE_PATH }}
+        run: |
+          kcl mod push ${{ env.OCI_URL }}
+
+

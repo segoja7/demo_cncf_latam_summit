@@ -529,8 +529,8 @@ elif _clusterTopology.typeCluster == "Spoke":
                     }
                     annotations = {
                         # GitOps Bridge metadata
-                        "addons_repo_url": "https://github.com/segoja7/platform_as_data"
-                        "addons_repo_path": "xargoapps/gitops-bridge/clusters/${_id}"
+                        "addons_repo_url": "https://github.com/segoja7/demo_cncf_latam_summit"
+                        "addons_repo_path": "example_basic_k8s"
                         "addons_repo_revision": "master"
                         "aws_region": _region
                         "cluster_name": _eks_cluster_resource._name
