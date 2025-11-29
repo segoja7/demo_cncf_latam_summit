@@ -1,21 +1,17 @@
 import k8s.api.apps.v1 as k8sapps
 import k8s.api.core.v1 as k8score
 
-schema WebService[env: str]:
-    """
-    Abstracción para desplegar un WebService (Deployment + Service)
-    """
-    # 1. Atributos de Entrada
+
+
+schema WebService[environment: str]:
+
     name: str
     image: str
     replicas: int = 1
     port: int = 80
 
-    # 2. Validaciones (Policy as Code)
-    check:
-        replicas >= 2 if env == "prod", "(min 2 replicas)."
-
-    deployment: k8sapps.Deployment = k8sapps.Deployment {
+    # Generamos el Deployment
+    deployment: k8sapps.Deployment = {
         metadata.name = name
         metadata.labels.app = name
         spec = {
@@ -32,7 +28,8 @@ schema WebService[env: str]:
         }
     }
 
-    service: k8score.Service = k8score.Service {
+    # Generamos el Service automáticamente
+    service: k8score.Service = {
         metadata.name = "${name}-svc"
         metadata.labels.app = name
         spec = {
@@ -45,3 +42,6 @@ schema WebService[env: str]:
             }]
         }
     }
+
+    check:
+        replicas >= 2 if environment == "prod", "(min 2 replicas)."
