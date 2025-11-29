@@ -1,16 +1,17 @@
 import k8s.api.apps.v1 as k8sapps
 import k8s.api.core.v1 as k8score
-import k8s.api.networking.v1 as k8snet
 
-
-schema WebService:
-
+schema WebService[env: str]:
     name: str
     image: str
     replicas: int = 1
     port: int = 80
 
-    # Generamos el Deployment
+    check:
+        # Regla: En PROD, mínimo 2 réplicas
+        replicas >= 2 if env == "prod", "(min 2 replicas)."
+
+    # Lógica de Generación (Base del Iceberg)
     deployment: k8sapps.Deployment = {
         metadata.name = name
         metadata.labels.app = name
@@ -28,7 +29,6 @@ schema WebService:
         }
     }
 
-    # Generamos el Service automáticamente
     service: k8score.Service = {
         metadata.name = "${name}-svc"
         metadata.labels.app = name

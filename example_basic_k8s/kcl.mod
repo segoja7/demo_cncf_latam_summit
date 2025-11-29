@@ -1,7 +1,7 @@
 [package]
 name = "example_basic_k8s"
 edition = "v0.11.2"
-version = "0.0.2"
+version = "0.0.3"
 
 [profile]
 entries = ["main.k"]
