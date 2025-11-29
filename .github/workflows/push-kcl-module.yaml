@@ -24,10 +24,10 @@ jobs:
       - name: Install KCL Binary
         run: |
           export KCL_DIR="$HOME/.kcl"
-
+          mkdir -p "$KCL_DIR/bin"
           wget -q https://kcl-lang.io/script/install-cli.sh -O - | KCL_INSTALL_DIR=$KCL_DIR bash
-
           echo "$KCL_DIR/bin" >> $GITHUB_PATH
+
       - name: Verify Install
         run: kcl --version
 
