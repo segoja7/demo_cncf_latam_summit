@@ -1,12 +1,12 @@
 [dependencies]
   [dependencies.example_basic_k8s]
     name = "example_basic_k8s"
-    full_name = "example_basic_k8s_0.0.6"
-    version = "0.0.6"
-    sum = "hxj4Q1lsi08ewJs/bc/GgMFev4ib8PhehKLY89MXYqE="
+    full_name = "example_basic_k8s_0.0.7"
+    version = "0.0.7"
+    sum = "q+V5CIypJG/0OtaRwT9rhMUxcQcOCUhnHiA3gG9aIw0="
     reg = "ghcr.io"
     repo = "segoja7/example_basic_k8s"
-    oci_tag = "0.0.6"
+    oci_tag = "0.0.7"
   [dependencies.k8s]
     name = "k8s"
     full_name = "k8s_1.32.4"
