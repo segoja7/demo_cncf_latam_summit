@@ -1,0 +1,83 @@
+apiVersion: segoja7.example/v1alpha1
+kind: XCLUSTER
+metadata:
+  name: spoke-gitops
+spec:
+  id: spoke-gitops
+  region: us-east-1
+  providerConfigName: segoja7
+  tags:
+    owner: "platform-team"
+    environment: "test"
+    project: "gitops-bridge"
+    managed-by: "crossplane"
+  accountId: "105249143178"
+  encryptCluster: false
+  authenticationMode: "API_AND_CONFIG_MAP"
+  logging:
+    - "api"
+    - "audit"
+  endpointPublicAccess: true
+  endpointPrivateAccess: false
+  publicAccessCidrs:
+    - "0.0.0.0/0"
+  networkId: "xnetwork-example"
+  clusterVersion: "1.33"
+  nodeGroup:
+    amiType: "BOTTLEROCKET_x86_64"
+    capacityType: "ON_DEMAND"
+    diskSize: 20
+    instanceTypes:
+     - "m7i-flex.large"
+    minSize: 1
+    maxSize: 2
+    desiredSize: 1
+    updateConfig:
+      maxUnavailablePercentage: 25
+  addons:
+   - name: eks-pod-identity-agent
+     version: "v1.3.8-eksbuild.2"
+     resolveConflicts: "OVERWRITE"
+   - name: vpc-cni
+     resolveConflicts: "OVERWRITE"
+   - name: coredns
+     resolveConflicts: "OVERWRITE"
+   - name: kube-proxy
+     resolveConflicts: "OVERWRITE"
+  enableArgo: false
+  clusterTopology:
+    typeCluster: Spoke
+    hubId: hub
+  # GitOps Bridge Configuration - Solo infraestructura
+  createHelmReleases: false              # ArgoCD manejará las aplicaciones
+  createAddonsInfrastructure: true       # Crossplane crea roles + SA
+  helmAddonsConfig:
+    - name: external-dns
+      serviceAccountName: external-dns
+      namespace: external-dns
+      customPolicy: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "route53:ChangeResourceRecordSets",
+                "route53:ListResourceRecordSets",
+                "route53:ListTagsForResources"
+              ],
+              "Resource": [
+                "arn:aws:route53:::hostedzone/*"
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "route53:ListHostedZones"
+              ],
+              "Resource": [
+                "*"
+              ]
+            }
+          ]
+        }

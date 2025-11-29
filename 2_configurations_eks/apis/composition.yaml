@@ -1,0 +1,23 @@
+# configurations-eks/apis/composition.yaml
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xclusters.segoja7.example
+spec:
+  compositeTypeRef:
+    apiVersion: segoja7.example/v1alpha1
+    kind: XCLUSTER
+  mode: Pipeline
+  pipeline:
+  - step: kcl
+    functionRef:
+      name: crossplane-contrib-function-kcl
+    input:
+      apiVersion: krm.kcl.dev/v1alpha1
+      kind: KCLRun
+      spec:
+        # target: Resources #TODO
+        source: github.com/segoja7/demo_cncf_latam_summit/xcluster
+  - step: auto-ready
+    functionRef:
+      name: crossplane-contrib-function-auto-ready
