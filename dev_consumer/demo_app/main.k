@@ -5,7 +5,7 @@ import example_basic_k8s as example
 app_ok = example.WebService("prod") {
     name = "demo-cncf"
     image = "nginx:latest"
-    replicas = 4
+    replicas = 1
 }
 
 
